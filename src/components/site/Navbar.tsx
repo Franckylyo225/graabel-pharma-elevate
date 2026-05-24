@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 const links = [
+  { to: "/", label: "Accueil" },
   { to: "/qui-sommes-nous", label: "À propos" },
   { to: "/services", label: "Services" },
   { to: "/expertise", label: "Expertise" },
@@ -48,6 +49,7 @@ export function Navbar() {
               to={l.to}
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
               activeProps={{ className: "text-primary" }}
+              activeOptions={l.to === "/" ? { exact: true } : undefined}
             >
               {l.label}
             </Link>
