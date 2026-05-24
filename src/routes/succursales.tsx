@@ -37,6 +37,7 @@ type Country = {
   id: string;
   flag: string;
   name: string;
+  city?: string;
   badge: string;
   variant: "primary" | "default" | "muted";
   address?: string;
@@ -53,6 +54,7 @@ const countries: Country[] = [
     id: "ci",
     flag: "🇨🇮",
     name: "Côte d'Ivoire",
+    city: "Abidjan",
     badge: "Siège social",
     variant: "primary",
     address:
