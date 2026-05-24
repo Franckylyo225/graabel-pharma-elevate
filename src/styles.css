@@ -122,11 +122,13 @@
     .container-x { padding-inline: 2.5rem; }
   }
 
-  .marquee {
+  .marquee,
+  .marquee-reverse {
     display: flex;
     width: max-content;
-    animation: marquee 40s linear infinite;
+    flex-shrink: 0;
   }
+  .marquee { animation: marquee 40s linear infinite; }
   .marquee-reverse { animation: marquee-reverse 45s linear infinite; }
   .marquee-wrap:hover .marquee,
   .marquee-wrap:hover .marquee-reverse { animation-play-state: paused; }
