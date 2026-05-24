@@ -1,11 +1,14 @@
+import { Link } from "@tanstack/react-router";
+
 const links = [
-  { href: "#about", label: "À propos" },
-  { href: "#services", label: "Services" },
-  { href: "#expertise", label: "Expertise" },
-  { href: "#partners", label: "Partenaires" },
-  { href: "#presence", label: "Présence" },
-  { href: "#contact", label: "Contact" },
-];
+  { to: "/qui-sommes-nous", label: "À propos" },
+  { to: "/services", label: "Services" },
+  { to: "/expertise", label: "Expertise" },
+  { to: "/partenaires", label: "Partenaires" },
+  { to: "/succursales", label: "Succursales" },
+  { to: "/actualites", label: "Actualités" },
+  { to: "/contact", label: "Contact" },
+] as const;
 
 const countries = ["Côte d'Ivoire — Siège", "Togo", "Bénin", "Sénégal", "Mali"];
 
