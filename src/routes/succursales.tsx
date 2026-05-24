@@ -69,6 +69,7 @@ const countries: Country[] = [
     id: "tg",
     flag: "🇹🇬",
     name: "Togo",
+    city: "Lomé",
     badge: "Succursale",
     variant: "default",
     address:
@@ -82,6 +83,7 @@ const countries: Country[] = [
     id: "bj",
     flag: "🇧🇯",
     name: "Bénin",
+    city: "Cotonou",
     badge: "Succursale",
     variant: "default",
     address:
@@ -94,6 +96,7 @@ const countries: Country[] = [
     id: "sn",
     flag: "🇸🇳",
     name: "Sénégal",
+    city: "Dakar",
     badge: "Prochainement",
     variant: "muted",
     message:
@@ -103,6 +106,7 @@ const countries: Country[] = [
     id: "ml",
     flag: "🇲🇱",
     name: "Mali",
+    city: "Bamako",
     badge: "Prochainement",
     variant: "muted",
     message:
