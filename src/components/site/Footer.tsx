@@ -1,11 +1,14 @@
+import { Link } from "@tanstack/react-router";
+
 const links = [
-  { href: "#about", label: "À propos" },
-  { href: "#services", label: "Services" },
-  { href: "#expertise", label: "Expertise" },
-  { href: "#partners", label: "Partenaires" },
-  { href: "#presence", label: "Présence" },
-  { href: "#contact", label: "Contact" },
-];
+  { to: "/qui-sommes-nous", label: "À propos" },
+  { to: "/services", label: "Services" },
+  { to: "/expertise", label: "Expertise" },
+  { to: "/partenaires", label: "Partenaires" },
+  { to: "/succursales", label: "Succursales" },
+  { to: "/actualites", label: "Actualités" },
+  { to: "/contact", label: "Contact" },
+] as const;
 
 const countries = ["Côte d'Ivoire — Siège", "Togo", "Bénin", "Sénégal", "Mali"];
 
@@ -31,10 +34,10 @@ export function Footer() {
           </p>
           <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="hover:text-white transition-colors">
+              <li key={l.to}>
+                <Link to={l.to} className="hover:text-white transition-colors">
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

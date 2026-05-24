@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Counter } from "./Counter";
 
 const stats = [
@@ -49,18 +50,18 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-9 flex flex-wrap gap-4"
           >
-            <a
-              href="#services"
+            <Link
+              to="/services"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
             >
               Découvrir nos services <ArrowRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#partners"
+            </Link>
+            <Link
+              to="/partenaires"
               className="inline-flex items-center rounded-full border border-border bg-background px-7 py-4 text-sm font-semibold text-navy transition-colors hover:border-primary hover:text-primary"
             >
               Nos partenaires
-            </a>
+            </Link>
           </motion.div>
 
           <motion.dl
