@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
 const links = [
+  { to: "/", label: "Accueil" },
   { to: "/qui-sommes-nous", label: "À propos" },
   { to: "/services", label: "Services" },
   { to: "/expertise", label: "Expertise" },
