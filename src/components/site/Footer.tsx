@@ -34,10 +34,10 @@ export function Footer() {
           </p>
           <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {links.map((l) => (
-              <li key={l.href}>
-                <a href={l.href} className="hover:text-white transition-colors">
+              <li key={l.to}>
+                <Link to={l.to} className="hover:text-white transition-colors">
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
