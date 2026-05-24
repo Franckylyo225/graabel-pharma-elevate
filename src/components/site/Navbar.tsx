@@ -47,7 +47,9 @@ export function Navbar() {
             <Link
               key={l.to}
               to={l.to}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+              className={`text-sm font-medium transition-colors hover:text-primary ${
+                scrolled ? "text-foreground/80" : "text-white/85"
+              }`}
               activeProps={{ className: "text-primary" }}
               activeOptions={l.to === "/" ? { exact: true } : undefined}
             >
