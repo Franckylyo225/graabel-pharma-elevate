@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Reveal } from "./Reveal";
 
 export function CtaBand() {
@@ -11,12 +12,12 @@ export function CtaBand() {
           <p className="mx-auto mt-5 max-w-xl text-lg text-primary-foreground/80">
             Contactez-nous pour discuter de votre projet.
           </p>
-          <a
-            href="#contact"
+          <Link
+            to="/contact"
             className="mt-10 inline-flex items-center rounded-full bg-background px-8 py-4 text-base font-semibold text-primary transition-transform duration-200 hover:scale-[1.03]"
           >
             Démarrer une collaboration
-          </a>
+          </Link>
         </Reveal>
       </div>
     </section>
