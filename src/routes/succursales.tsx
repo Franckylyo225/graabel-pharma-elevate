@@ -254,7 +254,15 @@ function WestAfricaMap() {
   );
 }
 
-function CountryCard({ country }: { country: Country }) {
+function CountryRow({
+  country,
+  isOpen,
+  onToggle,
+}: {
+  country: Country;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   const isPrimary = country.variant === "primary";
   const isMuted = country.variant === "muted";
 
@@ -264,73 +272,105 @@ function CountryCard({ country }: { country: Country }) {
     ? "bg-[#F1F5F9] text-navy ring-1 ring-border"
     : "bg-background ring-1 ring-border";
 
-  const labelTone = isPrimary ? "text-white/80" : isMuted ? "text-subtext" : "text-subtext";
+  const labelTone = isPrimary ? "text-white/80" : "text-subtext";
   const valueTone = isPrimary ? "text-white" : "text-navy";
   const iconWrap = isPrimary
     ? "bg-white/15 text-white ring-1 ring-inset ring-white/30"
     : "bg-tint text-primary";
+  const chevronWrap = isPrimary
+    ? "bg-white/15 text-white ring-1 ring-inset ring-white/30"
+    : isMuted
+    ? "bg-white text-navy ring-1 ring-border"
+    : "bg-tint text-primary";
 
   return (
-    <article className={`flex h-full flex-col rounded-3xl p-8 lg:p-10 ${base}`}>
-      {/* Top band */}
-      <header className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
+    <article className={`overflow-hidden rounded-3xl ${base}`}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="flex w-full items-center justify-between gap-4 p-6 text-left lg:p-8"
+      >
+        <div className="flex items-center gap-5">
           <span className="text-4xl leading-none" aria-hidden>
             {country.flag}
           </span>
           <div>
             <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${labelTone}`}>
               {country.badge}
+              {country.city ? ` · ${country.city}` : ""}
             </p>
             <h3 className={`font-display text-2xl font-extrabold leading-tight lg:text-3xl ${valueTone}`}>
               {country.name}
             </h3>
           </div>
         </div>
-      </header>
-
-      {country.message ? (
-        <p
-          className={`mt-8 text-base leading-relaxed ${
-            isPrimary ? "text-white/85" : "text-subtext"
+        <span
+          className={`grid h-11 w-11 shrink-0 place-items-center rounded-full transition-transform duration-300 ${chevronWrap} ${
+            isOpen ? "rotate-180" : ""
           }`}
         >
-          {country.message}
-        </p>
-      ) : (
-        <dl className="mt-8 space-y-5">
-          {country.address && (
-            <Row icon={MapPin} label="Adresse" value={country.address} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.phones && (
-            <Row icon={Phone} label="Téléphone" value={country.phones.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.mobiles && (
-            <Row icon={Smartphone} label="Mobile" value={country.mobiles.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.email && (
-            <Row icon={Mail} label="Email" value={country.email} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.web && (
-            <Row icon={Globe2} label="Web" value={country.web} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.team && (
-            <Row icon={Users} label="Équipe" value={country.team} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-        </dl>
-      )}
+          <ChevronDown className="h-5 w-5" />
+        </span>
+      </button>
 
-      <div className="mt-auto pt-8">
-        <Link
-          to="/contact"
-          className={`inline-flex items-center gap-2 text-sm font-semibold transition-transform hover:translate-x-1 ${
-            isPrimary ? "text-white" : "text-primary"
-          }`}
-        >
-          Nous contacter
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-8 lg:px-8 lg:pb-10">
+              {country.message ? (
+                <p
+                  className={`text-base leading-relaxed ${
+                    isPrimary ? "text-white/85" : "text-subtext"
+                  }`}
+                >
+                  {country.message}
+                </p>
+              ) : (
+                <dl className="space-y-5">
+                  {country.address && (
+                    <Row icon={MapPin} label="Adresse" value={country.address} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.phones && (
+                    <Row icon={Phone} label="Téléphone" value={country.phones.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.mobiles && (
+                    <Row icon={Smartphone} label="Mobile" value={country.mobiles.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.email && (
+                    <Row icon={Mail} label="Email" value={country.email} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.web && (
+                    <Row icon={Globe2} label="Web" value={country.web} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.team && (
+                    <Row icon={Users} label="Équipe" value={country.team} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                </dl>
+              )}
+
+              <div className="pt-8">
+                <Link
+                  to="/contact"
+                  className={`inline-flex items-center gap-2 text-sm font-semibold transition-transform hover:translate-x-1 ${
+                    isPrimary ? "text-white" : "text-primary"
+                  }`}
+                >
+                  Nous contacter
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </article>
   );
 }
