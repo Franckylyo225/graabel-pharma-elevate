@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
-import { Counter } from "./Counter";
+import { Globe2, ShieldCheck, Handshake } from "lucide-react";
+
 
 type Logo = { name: string; mark?: string };
 
