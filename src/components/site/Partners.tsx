@@ -1,5 +1,6 @@
 import { Reveal } from "./Reveal";
-import { Counter } from "./Counter";
+import { Globe2, ShieldCheck, Handshake } from "lucide-react";
+
 
 type Logo = { name: string; mark?: string };
 
@@ -62,12 +63,12 @@ function LogoStrip({ items, reverse = false }: { items: Logo[]; reverse?: boolea
   );
 }
 
-const proof = [
-  { value: 20, suffix: "+", label: "Laboratoires partenaires" },
-  { value: 12, suffix: "", label: "Nationalités représentées" },
-  { value: 30, suffix: " ans", label: "De relations construites" },
-  { value: 100, suffix: "%", label: "Conformité réglementaire" },
+const trust = [
+  { icon: Globe2, title: "Couverture multi-pays", desc: "5 marchés d'Afrique de l'Ouest pilotés depuis Abidjan." },
+  { icon: ShieldCheck, title: "Conformité réglementaire", desc: "Enregistrement et pharmacovigilance pris en charge." },
+  { icon: Handshake, title: "Relations long terme", desc: "Des partenariats construits sur 30 années d'engagement." },
 ];
+
 
 export function Partners() {
   return (
@@ -96,19 +97,23 @@ export function Partners() {
       </div>
 
       <div className="container-x mt-20">
-        <Reveal>
-          <dl className="grid gap-px overflow-hidden rounded-3xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {proof.map((p) => (
-              <div key={p.label} className="bg-[color:var(--surface-alt)] p-8 text-center">
-                <dt className="font-display text-4xl font-extrabold text-navy lg:text-5xl">
-                  <Counter to={p.value} suffix={p.suffix} />
-                </dt>
-                <dd className="mt-2 text-sm text-subtext">{p.label}</dd>
+        <div className="flex flex-col gap-6 md:flex-row md:gap-4">
+          {trust.map((t, i) => (
+            <Reveal key={t.title} delay={i * 0.08} className="flex-1">
+              <div className="flex h-full items-start gap-4 rounded-2xl border border-border bg-background p-6">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-tint text-primary">
+                  <t.icon className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="font-display text-base font-bold text-navy">{t.title}</p>
+                  <p className="mt-1 text-sm text-subtext">{t.desc}</p>
+                </div>
               </div>
-            ))}
-          </dl>
-        </Reveal>
+            </Reveal>
+          ))}
+        </div>
       </div>
+
     </section>
   );
 }
