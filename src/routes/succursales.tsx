@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import {
   MapPin,
   Phone,
@@ -10,7 +11,9 @@ import {
   Building2,
   Handshake,
   ArrowRight,
+  ChevronDown,
 } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { Reveal } from "@/components/site/Reveal";
 
@@ -34,6 +37,7 @@ type Country = {
   id: string;
   flag: string;
   name: string;
+  city?: string;
   badge: string;
   variant: "primary" | "default" | "muted";
   address?: string;
@@ -50,6 +54,7 @@ const countries: Country[] = [
     id: "ci",
     flag: "🇨🇮",
     name: "Côte d'Ivoire",
+    city: "Abidjan",
     badge: "Siège social",
     variant: "primary",
     address:
@@ -64,6 +69,7 @@ const countries: Country[] = [
     id: "tg",
     flag: "🇹🇬",
     name: "Togo",
+    city: "Lomé",
     badge: "Succursale",
     variant: "default",
     address:
@@ -77,6 +83,7 @@ const countries: Country[] = [
     id: "bj",
     flag: "🇧🇯",
     name: "Bénin",
+    city: "Cotonou",
     badge: "Succursale",
     variant: "default",
     address:
@@ -89,6 +96,7 @@ const countries: Country[] = [
     id: "sn",
     flag: "🇸🇳",
     name: "Sénégal",
+    city: "Dakar",
     badge: "Prochainement",
     variant: "muted",
     message:
@@ -98,6 +106,7 @@ const countries: Country[] = [
     id: "ml",
     flag: "🇲🇱",
     name: "Mali",
+    city: "Bamako",
     badge: "Prochainement",
     variant: "muted",
     message:
@@ -245,7 +254,15 @@ function WestAfricaMap() {
   );
 }
 
-function CountryCard({ country }: { country: Country }) {
+function CountryRow({
+  country,
+  isOpen,
+  onToggle,
+}: {
+  country: Country;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   const isPrimary = country.variant === "primary";
   const isMuted = country.variant === "muted";
 
@@ -255,73 +272,105 @@ function CountryCard({ country }: { country: Country }) {
     ? "bg-[#F1F5F9] text-navy ring-1 ring-border"
     : "bg-background ring-1 ring-border";
 
-  const labelTone = isPrimary ? "text-white/80" : isMuted ? "text-subtext" : "text-subtext";
+  const labelTone = isPrimary ? "text-white/80" : "text-subtext";
   const valueTone = isPrimary ? "text-white" : "text-navy";
   const iconWrap = isPrimary
     ? "bg-white/15 text-white ring-1 ring-inset ring-white/30"
     : "bg-tint text-primary";
+  const chevronWrap = isPrimary
+    ? "bg-white/15 text-white ring-1 ring-inset ring-white/30"
+    : isMuted
+    ? "bg-white text-navy ring-1 ring-border"
+    : "bg-tint text-primary";
 
   return (
-    <article className={`flex h-full flex-col rounded-3xl p-8 lg:p-10 ${base}`}>
-      {/* Top band */}
-      <header className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
+    <article className={`overflow-hidden rounded-3xl ${base}`}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        className="flex w-full items-center justify-between gap-4 p-6 text-left lg:p-8"
+      >
+        <div className="flex items-center gap-5">
           <span className="text-4xl leading-none" aria-hidden>
             {country.flag}
           </span>
           <div>
             <p className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${labelTone}`}>
               {country.badge}
+              {country.city ? ` · ${country.city}` : ""}
             </p>
             <h3 className={`font-display text-2xl font-extrabold leading-tight lg:text-3xl ${valueTone}`}>
               {country.name}
             </h3>
           </div>
         </div>
-      </header>
-
-      {country.message ? (
-        <p
-          className={`mt-8 text-base leading-relaxed ${
-            isPrimary ? "text-white/85" : "text-subtext"
+        <span
+          className={`grid h-11 w-11 shrink-0 place-items-center rounded-full transition-transform duration-300 ${chevronWrap} ${
+            isOpen ? "rotate-180" : ""
           }`}
         >
-          {country.message}
-        </p>
-      ) : (
-        <dl className="mt-8 space-y-5">
-          {country.address && (
-            <Row icon={MapPin} label="Adresse" value={country.address} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.phones && (
-            <Row icon={Phone} label="Téléphone" value={country.phones.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.mobiles && (
-            <Row icon={Smartphone} label="Mobile" value={country.mobiles.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.email && (
-            <Row icon={Mail} label="Email" value={country.email} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.web && (
-            <Row icon={Globe2} label="Web" value={country.web} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-          {country.team && (
-            <Row icon={Users} label="Équipe" value={country.team} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
-          )}
-        </dl>
-      )}
+          <ChevronDown className="h-5 w-5" />
+        </span>
+      </button>
 
-      <div className="mt-auto pt-8">
-        <Link
-          to="/contact"
-          className={`inline-flex items-center gap-2 text-sm font-semibold transition-transform hover:translate-x-1 ${
-            isPrimary ? "text-white" : "text-primary"
-          }`}
-        >
-          Nous contacter
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </div>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-8 lg:px-8 lg:pb-10">
+              {country.message ? (
+                <p
+                  className={`text-base leading-relaxed ${
+                    isPrimary ? "text-white/85" : "text-subtext"
+                  }`}
+                >
+                  {country.message}
+                </p>
+              ) : (
+                <dl className="space-y-5">
+                  {country.address && (
+                    <Row icon={MapPin} label="Adresse" value={country.address} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.phones && (
+                    <Row icon={Phone} label="Téléphone" value={country.phones.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.mobiles && (
+                    <Row icon={Smartphone} label="Mobile" value={country.mobiles.join(" · ")} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.email && (
+                    <Row icon={Mail} label="Email" value={country.email} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.web && (
+                    <Row icon={Globe2} label="Web" value={country.web} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                  {country.team && (
+                    <Row icon={Users} label="Équipe" value={country.team} iconWrap={iconWrap} labelTone={labelTone} valueTone={valueTone} />
+                  )}
+                </dl>
+              )}
+
+              <div className="pt-8">
+                <Link
+                  to="/contact"
+                  className={`inline-flex items-center gap-2 text-sm font-semibold transition-transform hover:translate-x-1 ${
+                    isPrimary ? "text-white" : "text-primary"
+                  }`}
+                >
+                  Nous contacter
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </article>
   );
 }
@@ -359,6 +408,9 @@ function Row({
 }
 
 function Page() {
+  const [openId, setOpenId] = useState<string | null>("ci");
+  const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
+
   return (
     <PageShell
       breadcrumb="Succursales"
@@ -378,7 +430,7 @@ function Page() {
         </div>
       </section>
 
-      {/* SECTION 2 — Country cards */}
+      {/* SECTION 2 — Country list (toggle) */}
       <section className="bg-[#FAFBFF] py-24 lg:py-32">
         <div className="container-x">
           <Reveal>
@@ -387,35 +439,26 @@ function Page() {
               <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-navy lg:text-5xl">
                 Le siège et nos <span className="text-primary">succursales</span>
               </h2>
+              <p className="mt-4 text-base text-subtext">
+                Cliquez sur un pays pour afficher les coordonnées détaillées.
+              </p>
             </div>
           </Reveal>
 
-          <div className="mt-16 space-y-6">
-            {/* Flagship full-width */}
-            <Reveal>
-              <CountryCard country={countries[0]} />
-            </Reveal>
-
-            {/* Active branches */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              {countries.slice(1, 3).map((c, i) => (
-                <Reveal key={c.id} delay={i * 0.08}>
-                  <CountryCard country={c} />
-                </Reveal>
-              ))}
-            </div>
-
-            {/* Coming soon */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              {countries.slice(3).map((c, i) => (
-                <Reveal key={c.id} delay={i * 0.08}>
-                  <CountryCard country={c} />
-                </Reveal>
-              ))}
-            </div>
+          <div className="mx-auto mt-14 max-w-4xl space-y-4">
+            {countries.map((c, i) => (
+              <Reveal key={c.id} delay={i * 0.05}>
+                <CountryRow
+                  country={c}
+                  isOpen={openId === c.id}
+                  onToggle={() => toggle(c.id)}
+                />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
+
 
       {/* SECTION 3 — Why West Africa */}
       <section className="py-24 lg:py-32">
