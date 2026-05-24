@@ -408,6 +408,9 @@ function Row({
 }
 
 function Page() {
+  const [openId, setOpenId] = useState<string | null>("ci");
+  const toggle = (id: string) => setOpenId((prev) => (prev === id ? null : id));
+
   return (
     <PageShell
       breadcrumb="Succursales"
@@ -427,7 +430,7 @@ function Page() {
         </div>
       </section>
 
-      {/* SECTION 2 — Country cards */}
+      {/* SECTION 2 — Country list (toggle) */}
       <section className="bg-[#FAFBFF] py-24 lg:py-32">
         <div className="container-x">
           <Reveal>
@@ -436,35 +439,26 @@ function Page() {
               <h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-navy lg:text-5xl">
                 Le siège et nos <span className="text-primary">succursales</span>
               </h2>
+              <p className="mt-4 text-base text-subtext">
+                Cliquez sur un pays pour afficher les coordonnées détaillées.
+              </p>
             </div>
           </Reveal>
 
-          <div className="mt-16 space-y-6">
-            {/* Flagship full-width */}
-            <Reveal>
-              <CountryCard country={countries[0]} />
-            </Reveal>
-
-            {/* Active branches */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              {countries.slice(1, 3).map((c, i) => (
-                <Reveal key={c.id} delay={i * 0.08}>
-                  <CountryCard country={c} />
-                </Reveal>
-              ))}
-            </div>
-
-            {/* Coming soon */}
-            <div className="grid gap-6 lg:grid-cols-2">
-              {countries.slice(3).map((c, i) => (
-                <Reveal key={c.id} delay={i * 0.08}>
-                  <CountryCard country={c} />
-                </Reveal>
-              ))}
-            </div>
+          <div className="mx-auto mt-14 max-w-4xl space-y-4">
+            {countries.map((c, i) => (
+              <Reveal key={c.id} delay={i * 0.05}>
+                <CountryRow
+                  country={c}
+                  isOpen={openId === c.id}
+                  onToggle={() => toggle(c.id)}
+                />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
+
 
       {/* SECTION 3 — Why West Africa */}
       <section className="py-24 lg:py-32">
