@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 const links = [
-  { href: "#about", label: "À propos" },
-  { href: "#services", label: "Services" },
-  { href: "#expertise", label: "Expertise" },
-  { href: "#partners", label: "Partenaires" },
-  { href: "#presence", label: "Présence" },
-  { href: "#contact", label: "Contact" },
-];
+  { to: "/qui-sommes-nous", label: "À propos" },
+  { to: "/services", label: "Services" },
+  { to: "/expertise", label: "Expertise" },
+  { to: "/partenaires", label: "Partenaires" },
+  { to: "/succursales", label: "Succursales" },
+  { to: "/actualites", label: "Actualités" },
+  { to: "/contact", label: "Contact" },
+] as const;
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -30,33 +32,34 @@ export function Navbar() {
       }`}
     >
       <div className="container-x flex h-18 items-center justify-between py-4">
-        <a href="#top" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary text-primary-foreground font-bold text-sm tracking-tight">
             GP
           </span>
           <span className="font-display text-lg font-bold text-navy">
             Graabel Pharma
           </span>
-        </a>
+        </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+        <nav className="hidden lg:flex items-center gap-7">
+          {links.slice(0, -1).map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+              activeProps={{ className: "text-primary" }}
             >
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        <a
-          href="#contact"
+        <Link
+          to="/contact"
           className="hidden lg:inline-flex items-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.03] hover:bg-primary/90"
         >
           Nous contacter
-        </a>
+        </Link>
 
         <button
           aria-label="Menu"
@@ -81,22 +84,15 @@ export function Navbar() {
           </div>
           <nav className="container-x mt-8 flex flex-col gap-2">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
+              <Link
+                key={l.to}
+                to={l.to}
                 onClick={() => setOpen(false)}
                 className="border-b border-border py-5 text-2xl font-semibold text-navy"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-6 py-4 text-base font-semibold text-primary-foreground"
-            >
-              Nous contacter
-            </a>
           </nav>
         </div>
       )}
