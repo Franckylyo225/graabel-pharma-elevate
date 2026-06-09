@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -16,6 +16,10 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Home page has a light hero; all other pages use the dark PageHero.
+  const darkHero = pathname !== "/";
+  const onDarkBg = darkHero && !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -48,7 +52,7 @@ export function Navbar() {
               key={l.to}
               to={l.to}
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                scrolled ? "text-foreground/80" : "text-white/85"
+                onDarkBg ? "text-white/85" : "text-foreground/80"
               }`}
               activeProps={{ className: "!text-primary" }}
               activeOptions={l.to === "/" ? { exact: true } : undefined}
