@@ -52,7 +52,7 @@ export function Navbar() {
               key={l.to}
               to={l.to}
               className={`text-sm font-medium transition-colors hover:text-primary ${
-                scrolled ? "text-foreground/80" : "text-white/85"
+                onDarkBg ? "text-white/85" : "text-foreground/80"
               }`}
               activeProps={{ className: "!text-primary" }}
               activeOptions={l.to === "/" ? { exact: true } : undefined}
