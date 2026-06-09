@@ -16,6 +16,10 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Home page has a light hero; all other pages use the dark PageHero.
+  const darkHero = pathname !== "/";
+  const onDarkBg = darkHero && !scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
